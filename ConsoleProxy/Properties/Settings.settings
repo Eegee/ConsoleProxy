@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Eegee.ConsoleProxy.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="LineProcessorAssemblyFile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">ethminermonlib</Value>
+    </Setting>
+    <Setting Name="LineProcessorType" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Eegee.Ethminermon.MiningProcessor</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

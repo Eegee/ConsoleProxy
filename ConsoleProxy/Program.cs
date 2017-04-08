@@ -15,25 +15,13 @@ namespace Eegee.ConsoleProxy
     using Eegee.ConsoleProxy.LineProcessor.Interfaces;
 
     /// <summary>
-    /// A CtrlType for the ConsoleEventDelegate
-    /// </summary>
-    internal enum CtrlType
-    {
-        CTRL_C_EVENT = 0,
-        CTRL_BREAK_EVENT = 1,
-        CTRL_CLOSE_EVENT = 2,
-        CTRL_LOGOFF_EVENT = 5,
-        CTRL_SHUTDOWN_EVENT = 6
-    }
-
-    /// <summary>
     /// The main program
     /// </summary>
     internal sealed class Program
     {
         private const string SettingLineProcessor = "LineProcessorAssemblyFile";
         private const int ErrorInvalidCommandLine = 0x667;
-        private static ConsoleEventDelegate handler;
+        private static NativeMethods.ConsoleEventDelegate handler;
         private static ProcessState processState;
         private static ILineProcessor processor;
         private static Process process;
@@ -41,18 +29,16 @@ namespace Eegee.ConsoleProxy
         private static ConsoleWriter consoleWriter = new ConsoleWriter();
         private static string defaultTitle = Console.Title;
 
-        private delegate bool ConsoleEventDelegate(CtrlType eventType);
-
         /// <summary>
         /// The main process entry
         /// </summary>
         /// <param name="args">The command line arguments</param>
         public static void Main(string[] args)
         {
-            ////AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Console.CancelKeyPress += Console_CancelKeyPress;
-            handler = new ConsoleEventDelegate(ConsoleEventCallback);
-            SetConsoleCtrlHandler(handler, true);
+            handler = new NativeMethods.ConsoleEventDelegate(ConsoleEventCallback);
+            NativeMethods.SetConsoleCtrlHandler(handler, true);
 
             processState = new ProcessState();
             processor = CreateProcessor(processState);
@@ -198,11 +184,6 @@ namespace Eegee.ConsoleProxy
             Environment.Exit(ErrorInvalidCommandLine);
         }
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        private static extern bool SetConsoleCtrlHandler(ConsoleEventDelegate callback, bool add);
-        ////[DllImport("kernel32.dll", SetLastError = true)]
-        ////private static extern bool GenerateConsoleCtrlEvent(CtrlType dwCtrlEvent, uint dwProcessGroupId);
-
         private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             consoleWriter.WriteMessage("Exception occurred.", ConsoleColor.White);
@@ -336,13 +317,6 @@ namespace Eegee.ConsoleProxy
                     processState.MustRestart = true;
                     CloseProcess();
                 }
-
-                ////if (restartTime < now.AddSeconds(-20))
-                ////{
-                ////    consoleWriter.WriteMessage("Testje.", ConsoleColor.Yellow);
-                ////    mustRestart = true;
-                ////    CloseProcess();
-                ////}
 
                 if (processState.HasErrored && process != null && !process.HasExited)
                 {

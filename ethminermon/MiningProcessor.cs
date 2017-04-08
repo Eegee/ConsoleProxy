@@ -16,6 +16,7 @@ namespace Eegee.Ethminermon
     {
         private MiningState miningState;
         private CultureInfo cultureInfo;
+        private int prevcursortop;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MiningProcessor" /> class
@@ -26,6 +27,7 @@ namespace Eegee.Ethminermon
         {
             this.miningState = new MiningState();
             this.cultureInfo = CultureInfo.GetCultureInfo("en-US");
+            this.prevcursortop = 0;
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace Eegee.Ethminermon
                     if (wasMiningOn)
                     {
                         int top = cursortop - 1;
-                        if (top > -1)
+                        if (top > -1 && top >= this.prevcursortop)
                         {
                             Console.CursorTop = top;
                         }
@@ -116,8 +118,20 @@ namespace Eegee.Ethminermon
                 else if (StringUtility.Contains(line, "FAIL", this.cultureInfo, CompareOptions.IgnoreCase) || StringUtility.Contains(line, ":-(", this.cultureInfo))
                 {
                     this.miningState.SolutionFound = false;
-                    ProcessState.HasErrored = true;
                     foregroundcolor = ConsoleColor.Red;
+                    if (StringUtility.Contains(line, "Read response failed: End of file", this.cultureInfo, CompareOptions.IgnoreCase))
+                    {
+                        ProcessState.ReadResponseFailed++;
+                        if (ProcessState.ReadResponseFailed >= 3)
+                        {
+                            ProcessState.HasErrored = true;
+                            ProcessState.ReadResponseFailed = 0;
+                        }
+                    }
+                    else
+                    {
+                        ProcessState.HasErrored = true;
+                    }
                 }
                 else if (StringUtility.Contains(line, "B-)", this.cultureInfo))
                 {
@@ -158,6 +172,7 @@ namespace Eegee.Ethminermon
                 }
             }
 
+            this.prevcursortop = Console.CursorTop;
             return line;
         }
 

@@ -52,6 +52,11 @@ namespace Eegee.ConsoleProxy
         public bool HasErrored { get; set; }
 
         /// <summary>
+        /// Gets or sets the number of times reading the response failed
+        /// </summary>
+        public int ReadResponseFailed { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the proxified process is closing or being closed
         /// </summary>
         public bool IsClosing { get; set; }

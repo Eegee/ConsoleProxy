@@ -37,9 +37,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DefaultProcessor.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
-    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ConsoleProxy\ConsoleProxy.csproj">

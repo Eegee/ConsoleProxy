@@ -17,6 +17,11 @@ namespace Eegee.ConsoleProxy.LineProcessor.Interfaces
         bool HasErrored { get; set; }
 
         /// <summary>
+        /// Gets or sets the number of times reading the response failed
+        /// </summary>
+        int ReadResponseFailed { get; set; }
+
+        /// <summary>
         /// Gets the last line
         /// </summary>
         string LastLine { get; }

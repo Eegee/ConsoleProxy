@@ -98,7 +98,7 @@ namespace Eegee.Ethminermon
                     if (wasMiningOn)
                     {
                         int top = cursortop - 1;
-                        if (top > -1 && top >= this.prevcursortop)
+                        if (top > -1 && top >= this.prevcursortop - 1)
                         {
                             Console.CursorTop = top;
                         }
@@ -172,7 +172,7 @@ namespace Eegee.Ethminermon
                 }
             }
 
-            this.prevcursortop = Console.CursorTop;
+            this.prevcursortop = Math.Max(this.prevcursortop, Console.CursorTop);
             return line;
         }
 

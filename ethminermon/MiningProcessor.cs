@@ -119,7 +119,7 @@ namespace Eegee.Ethminermon
                 {
                     this.miningState.SolutionFound = false;
                     foregroundcolor = ConsoleColor.Red;
-                    if (StringUtility.Contains(line, "Read response failed: End of file", this.cultureInfo, CompareOptions.IgnoreCase))
+                    if (StringUtility.Contains(line, "Read response failed: ", this.cultureInfo, CompareOptions.IgnoreCase))
                     {
                         ProcessState.ReadResponseFailed++;
                         if (ProcessState.ReadResponseFailed >= 3)
